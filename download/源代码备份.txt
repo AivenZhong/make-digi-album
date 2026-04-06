@@ -1,0 +1,3005 @@
+============================================================
+  源代码备份 - AI电子学习单 · 制作数字相册
+  备份时间: 2025年
+  文件总数: 21
+============================================================
+
+
+===== 文件: src/app/page.tsx =====
+'use client'
+
+import { AnimatePresence, motion } from 'framer-motion'
+import { useLearningStore } from '@/lib/store'
+import { StepNav } from '@/components/learning/StepNav'
+import { WelcomePage } from '@/components/learning/WelcomePage'
+import { ActivityOne } from '@/components/learning/ActivityOne'
+import { ActivityTwo } from '@/components/learning/ActivityTwo'
+import { ActivityThree } from '@/components/learning/ActivityThree'
+import { Quiz } from '@/components/learning/Quiz'
+import { SelfEvaluation } from '@/components/learning/SelfEvaluation'
+import { AIComment } from '@/components/learning/AIComment'
+
+function StepContent({ step }: { step: number }) {
+  switch (step) {
+    case 0:
+      return <WelcomePage />
+    case 1:
+      return <ActivityOne />
+    case 2:
+      return <ActivityTwo />
+    case 3:
+      return <ActivityThree />
+    case 4:
+      return <Quiz />
+    case 5:
+      return <SelfEvaluation />
+    case 6:
+      return <AIComment />
+    default:
+      return <WelcomePage />
+  }
+}
+
+export default function Home() {
+  const { currentStep, totalSteps } = useLearningStore()
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50/50 to-white">
+      {/* Header */}
+      <header className="bg-white border-b border-border/50 sticky top-0 z-50 backdrop-blur-sm bg-white/90">
+        <div className="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs font-bold">
+              AI
+            </div>
+            <div>
+              <h1 className="text-sm font-bold text-foreground leading-tight">制作数字相册</h1>
+              <p className="text-[10px] text-muted-foreground">信息科技 第13课</p>
+            </div>
+          </div>
+          {currentStep > 0 && (
+            <div className="text-xs text-muted-foreground">
+              {currentStep} / {totalSteps - 1}
+            </div>
+          )}
+        </div>
+        {currentStep > 0 && <StepNav />}
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 w-full">
+        <div className="max-w-5xl mx-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="pb-8"
+            >
+              <StepContent step={currentStep} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-border/50 mt-auto">
+        <div className="max-w-5xl mx-auto px-4 py-3">
+          <p className="text-center text-xs text-muted-foreground">
+            AI电子学习单 · 信息科技 三年级上册 第四单元 第13课 · 制作数字相册
+          </p>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
+
+===== 文件: src/app/layout.tsx =====
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "AI电子学习单 - 制作数字相册",
+  description: "信息科技三年级上册第四单元第13课，制作数字相册AI电子学习单",
+  icons: {
+    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="zh-CN" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+      >
+        {children}
+        <Toaster />
+      </body>
+    </html>
+  );
+}
+
+
+===== 文件: src/app/globals.css =====
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+===== 文件: src/app/api/ai-comment/route.ts =====
+import { NextRequest, NextResponse } from 'next/server'
+
+/**
+ * AI评语生成接口
+ * 
+ * 支持三种模式（按优先级）：
+ * 1. z-ai-web-dev-sdk（沙盒环境自动可用）
+ * 2. OpenAI 兼容 API（需要配置环境变量 OPENAI_API_KEY 和 OPENAI_BASE_URL）
+ * 3. 本地模板生成（无需任何API，完全离线可用）
+ */
+
+async function generateWithZAI(systemPrompt: string, userPrompt: string): Promise<string | null> {
+  try {
+    const ZAI = (await import('z-ai-web-dev-sdk')).default
+    const zai = await ZAI.create()
+    const completion = await zai.chat.completions.create({
+      messages: [
+        { role: 'assistant', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      thinking: { type: 'disabled' },
+    })
+    return completion.choices[0]?.message?.content || null
+  } catch {
+    return null
+  }
+}
+
+async function generateWithOpenAI(systemPrompt: string, userPrompt: string): Promise<string | null> {
+  const apiKey = process.env.OPENAI_API_KEY
+  const baseUrl = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1'
+  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini'
+
+  if (!apiKey) return null
+
+  try {
+    const response = await fetch(`${baseUrl}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.8,
+        max_tokens: 500,
+      }),
+    })
+
+    if (!response.ok) return null
+    const data = await response.json()
+    return data.choices?.[0]?.message?.content || null
+  } catch {
+    return null
+  }
+}
+
+function generateLocalComment(data: {
+  studentName: string
+  studentClass: string
+  activity1Completed: boolean
+  activity2Completed: boolean
+  activity3Completed: boolean
+  quizCorrect: number
+  quizTotal: number
+  quizScore: number
+  avgEval: number
+}): string {
+  const { studentName, activity1Completed, activity2Completed, activity3Completed, quizCorrect, quizTotal, quizScore, avgEval } = data
+  const name = studentName || '同学'
+
+  const completedCount = [activity1Completed, activity2Completed, activity3Completed].filter(Boolean).length
+
+  // 开头 - 肯定努力
+  const openings = [
+    `${name}，今天你在信息课上的表现非常出色！`,
+    `${name}，今天的课堂你积极参与，表现得很棒！`,
+    `${name}，看到你今天认真学习的样子，老师非常高兴！`,
+  ]
+  const opening = openings[Math.floor(Math.random() * openings.length)]
+
+  // 活动评价
+  let activityComment = ''
+  if (completedCount === 3) {
+    activityComment = '三个学习活动你都顺利完成，这说明你不仅认真听讲，还能够积极动手实践。'
+  } else if (completedCount === 2) {
+    activityComment = '你完成了大部分学习活动，学习态度值得表扬！'
+  } else {
+    activityComment = '虽然有些活动还没来得及完成，但你已经迈出了学习的步伐，这本身就很棒！'
+  }
+
+  // 测试评价
+  let quizComment = ''
+  if (quizTotal > 0) {
+    if (quizScore >= 80) {
+      quizComment = `课堂小测试你答对了${quizCorrect}道题，取得了${quizScore}分的好成绩，对今天学到的知识掌握得很扎实！`
+    } else if (quizScore >= 60) {
+      quizComment = `小测试你答对了${quizCorrect}道题，得分${quizScore}分，基础掌握得不错，继续加油！`
+    } else {
+      quizComment = `小测试答对了${quizCorrect}道题，得分${quizScore}分。没关系，学习就是不断积累的过程，多复习几遍就会越来越好的！`
+    }
+  }
+
+  // 自评评价
+  let evalComment = ''
+  if (avgEval >= 4) {
+    evalComment = '你的自我评价非常高，说明你对自己充满信心，老师也相信你一定可以做得更好！'
+  } else if (avgEval >= 3) {
+    evalComment = '你的自我评价很中肯，能够客观认识自己的学习情况，这种自我反思的能力非常可贵。'
+  } else if (avgEval > 0) {
+    evalComment = '你觉得还有进步的空间，这恰恰说明你是一个追求进步的孩子！'
+  }
+
+  // 结尾 - 展望未来
+  const endings = [
+    '希望你把今天学到的制作数字相册的本领用到生活中，用数字相册记录你成长的每一个精彩瞬间！加油！',
+    '相信你已经掌握了制作数字相册的方法，课下可以试试给家人制作一个温馨的数字相册，他们一定会非常开心的！',
+    '数字相册是记录美好回忆的好帮手，期待你用今天学到的技能，创作出更多精彩的作品！继续加油哦！',
+  ]
+  const ending = endings[Math.floor(Math.random() * endings.length)]
+
+  return `${opening}\n\n${activityComment}\n\n${quizComment}\n\n${evalComment}\n\n${ending}`
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const {
+      studentName,
+      studentClass,
+      activity1Completed,
+      activity2Completed,
+      activity3Completed,
+      quizCorrect,
+      quizTotal,
+      avgEval,
+    } = body
+
+    const quizScore = quizTotal > 0 ? Math.round((quizCorrect / quizTotal) * 100) : 0
+
+    const systemPrompt = '你是一位经验丰富、和蔼可亲的小学信息技术老师，擅长写鼓励性评语。你的评语温暖、具体、有针对性，适合小学三年级学生阅读。'
+    const userPrompt = `你是一位经验丰富、和蔼可亲的小学信息技术老师。请根据以下学生课堂表现数据，为这位学生写一段鼓励性的评语。
+
+学生姓名：${studentName}
+班级：${studentClass || '未填写'}
+活动一完成情况：${activity1Completed ? '已完成' : '未完成'}
+活动二完成情况：${activity2Completed ? '已完成' : '未完成'}
+活动三完成情况：${activity3Completed ? '已完成' : '未完成'}
+课堂小测试成绩：${quizCorrect}/${quizTotal}（正确${quizScore}分）
+自我评价平均星级：${avgEval}/5
+
+评语要求：
+1. 以鼓励和正向为主，语言温暖亲切，适合小学三年级学生阅读
+2. 评语控制在150-250字左右
+3. 先肯定学生的努力和完成情况
+4. 根据测试成绩和自评情况，给予具体的表扬
+5. 如果有未完成的活动或测试成绩不理想，用鼓励的方式引导继续努力，不要批评
+6. 最后展望未来，鼓励学生在生活中也能运用所学知识
+7. 适当使用感叹号和亲切的称呼，语气活泼
+8. 不要使用emoji或表情符号
+9. 直接输出评语内容，不要加引号或额外格式`
+
+    // 依次尝试：z-ai-web-dev-sdk → OpenAI兼容API → 本地模板
+    let comment = await generateWithZAI(systemPrompt, userPrompt)
+
+    if (!comment) {
+      comment = await generateWithOpenAI(systemPrompt, userPrompt)
+    }
+
+    if (!comment) {
+      comment = generateLocalComment({
+        studentName: studentName || '同学',
+        studentClass: studentClass || '',
+        activity1Completed,
+        activity2Completed,
+        activity3Completed,
+        quizCorrect,
+        quizTotal,
+        quizScore,
+        avgEval,
+      })
+    }
+
+    return NextResponse.json({ comment })
+  } catch (error) {
+    console.error('AI comment generation error:', error)
+    return NextResponse.json(
+      { error: '生成评语失败，请重试' },
+      { status: 500 }
+    )
+  }
+}
+
+
+===== 文件: src/components/learning/StepNav.tsx =====
+'use client'
+
+import { useLearningStore } from '@/lib/store'
+import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
+
+const STEPS = [
+  { label: '开始', icon: '🏠' },
+  { label: '活动一', icon: '📸' },
+  { label: '活动二', icon: '🎬' },
+  { label: '活动三', icon: '🎨' },
+  { label: '小测试', icon: '📝' },
+  { label: '自我评价', icon: '⭐' },
+  { label: 'AI评语', icon: '🤖' },
+]
+
+export function StepNav() {
+  const { currentStep, totalSteps, setCurrentStep } = useLearningStore()
+
+  return (
+    <div className="w-full py-3 px-4">
+      {/* Progress Bar */}
+      <div className="mb-3">
+        <div className="h-2 bg-muted rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full"
+            initial={false}
+            animate={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+          />
+        </div>
+      </div>
+
+      {/* Step Indicators */}
+      <div className="flex items-center justify-between max-w-2xl mx-auto">
+        {STEPS.map((step, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => setCurrentStep(index)}
+            className="flex flex-col items-center gap-1 focus:outline-none"
+          >
+            <motion.div
+              className={cn(
+                'w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-base font-bold transition-colors',
+                index < currentStep
+                  ? 'bg-emerald-500 text-white shadow-md shadow-emerald-200'
+                  : index === currentStep
+                  ? 'bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg shadow-emerald-200 scale-110'
+                  : 'bg-muted text-muted-foreground'
+              )}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {index < currentStep ? '✓' : step.icon}
+            </motion.div>
+            <span
+              className={cn(
+                'text-[10px] sm:text-xs font-medium',
+                index <= currentStep ? 'text-foreground' : 'text-muted-foreground'
+              )}
+            >
+              {step.label}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+
+===== 文件: src/components/learning/WelcomePage.tsx =====
+'use client'
+
+import { useLearningStore } from '@/lib/store'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { motion } from 'framer-motion'
+import { BookOpen, Sparkles } from 'lucide-react'
+
+export function WelcomePage() {
+  const { studentName, studentClass, setStudentName, setStudentClass, nextStep } = useLearningStore()
+
+  const canStart = studentName.trim().length > 0 && studentClass.trim().length > 0
+
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center p-4">
+      <motion.div
+        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Decorative top */}
+        <div className="text-center mb-6">
+          <motion.div
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-full px-4 py-1.5 mb-4"
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            <Sparkles className="w-4 h-4 text-emerald-600" />
+            <span className="text-sm font-medium text-emerald-700">AI 电子学习单</span>
+            <Sparkles className="w-4 h-4 text-emerald-600" />
+          </motion.div>
+          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+            制作数字相册
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            信息科技 三年级上册 第四单元 第13课
+          </p>
+        </div>
+
+        {/* Welcome Card */}
+        <div className="bg-white rounded-2xl shadow-xl shadow-emerald-100/50 border border-emerald-100 p-6 sm:p-8">
+          <div className="flex items-start gap-3 mb-6">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center flex-shrink-0">
+              <BookOpen className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-foreground mb-1">欢迎来到课堂</h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                今天我们将学习如何制作精美的数字相册，记录美好的校园生活！
+              </p>
+            </div>
+          </div>
+
+          {/* Learning Objectives */}
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 mb-6 border border-amber-100">
+            <h3 className="text-sm font-bold text-amber-800 mb-2">学习目标</h3>
+            <ul className="space-y-1.5 text-sm text-amber-700">
+              <li className="flex items-start gap-2">
+                <span className="text-amber-500 mt-0.5">●</span>
+                <span>了解数字相册的特点和素材类型</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-500 mt-0.5">●</span>
+                <span>学会使用软件模板制作数字相册</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-amber-500 mt-0.5">●</span>
+                <span>掌握创作数字相册的过程和方法</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Student Info Form */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                请输入你的姓名
+              </label>
+              <Input
+                value={studentName}
+                onChange={(e) => setStudentName(e.target.value)}
+                placeholder="例如：张小明"
+                className="h-11 text-base"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                请输入你的班级
+              </label>
+              <Input
+                value={studentClass}
+                onChange={(e) => setStudentClass(e.target.value)}
+                placeholder="例如：三年级1班"
+                className="h-11 text-base"
+              />
+            </div>
+          </div>
+
+          {/* Start Button */}
+          <motion.div className="mt-6" whileTap={{ scale: 0.97 }}>
+            <Button
+              onClick={nextStep}
+              disabled={!canStart}
+              className="w-full h-12 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-200 transition-all disabled:opacity-50 disabled:shadow-none"
+            >
+              开始学习
+            </Button>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+
+===== 文件: src/components/learning/ActivityOne.tsx =====
+'use client'
+
+import { useState } from 'react'
+import { useLearningStore, type Activity1Answer } from '@/lib/store'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowLeft, ArrowRight, Camera, ImageIcon, Clock, Pencil, Music } from 'lucide-react'
+
+type OptionKey = 'storage' | 'duration' | 'editable' | 'materials'
+
+interface RowConfig {
+  key: OptionKey
+  label: string
+  icon: React.ReactNode
+  options: { value: string; label: string }[]
+}
+
+const rows: RowConfig[] = [
+  {
+    key: 'storage',
+    label: '存储载体',
+    icon: <Camera className="w-4 h-4" />,
+    options: [
+      { value: '纸张', label: '纸张（相纸）' },
+      { value: '数字设备', label: '数字设备' },
+    ],
+  },
+  {
+    key: 'duration',
+    label: '保存时间',
+    icon: <Clock className="w-4 h-4" />,
+    options: [
+      { value: '一段时间', label: '可保存一段时间' },
+      { value: '永久保存', label: '永久保存' },
+    ],
+  },
+  {
+    key: 'editable',
+    label: '是否能修改',
+    icon: <Pencil className="w-4 h-4" />,
+    options: [
+      { value: '是', label: '是' },
+      { value: '否', label: '否' },
+    ],
+  },
+  {
+    key: 'materials',
+    label: '包含的素材',
+    icon: <Music className="w-4 h-4" />,
+    options: [
+      { value: '图片', label: '图片' },
+      { value: '文字', label: '文字' },
+      { value: '音频', label: '音频' },
+    ],
+  },
+]
+
+const SUMMARY_TRADITIONAL = {
+  storage: '纸张',
+  duration: '一段时间',
+  editable: '否',
+  materials: ['图片'],
+}
+
+const SUMMARY_DIGITAL = {
+  storage: '数字设备',
+  duration: '永久保存',
+  editable: '是',
+  materials: ['图片', '文字', '音频'],
+}
+
+export function ActivityOne() {
+  const { prevStep, nextStep, setActivity1Answer, setActivity1Completed } = useLearningStore()
+
+  const [traditional, setTraditional] = useState<Record<OptionKey, string>>({
+    storage: '',
+    duration: '',
+    editable: '',
+    materials: '',
+  })
+  const [digital, setDigital] = useState<Record<OptionKey, string>>({
+    storage: '',
+    duration: '',
+    editable: '',
+    materials: '',
+  })
+  const [traditionalMaterials, setTraditionalMaterials] = useState<string[]>([])
+  const [digitalMaterials, setDigitalMaterials] = useState<string[]>([])
+  const [samePoint, setSamePoint] = useState('')
+  const [showSummary, setShowSummary] = useState(false)
+
+  const toggleMaterial = (type: 'traditional' | 'digital', material: string) => {
+    if (type === 'traditional') {
+      setTraditionalMaterials((prev) =>
+        prev.includes(material) ? prev.filter((m) => m !== material) : [...prev, material]
+      )
+    } else {
+      setDigitalMaterials((prev) =>
+        prev.includes(material) ? prev.filter((m) => m !== material) : [...prev, material]
+      )
+    }
+  }
+
+  const handleSubmit = () => {
+    const answer: Activity1Answer = {
+      traditional: {
+        storage: traditional.storage,
+        duration: traditional.duration,
+        editable: traditional.editable,
+        materials: traditionalMaterials,
+        other: '',
+      },
+      digital: {
+        storage: digital.storage,
+        duration: digital.duration,
+        editable: digital.editable,
+        materials: digitalMaterials,
+        other: '',
+      },
+      samePoint,
+    }
+    setActivity1Answer(answer)
+    setShowSummary(true)
+    setActivity1Completed(true)
+  }
+
+  const isComplete =
+    traditional.storage && traditional.duration && traditional.editable &&
+    digital.storage && digital.duration && digital.editable
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+            📸 活动一
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            议一议：数字相册及其特点
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            对比传统相册和数字相册，发现它们的不同！
+          </p>
+        </div>
+
+        {/* Comparison Table */}
+        <AnimatePresence mode="wait">
+          {!showSummary ? (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {/* Same Point */}
+              <Card className="mb-5 border-purple-100 shadow-md">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-bold flex items-center gap-2">
+                    <ImageIcon className="w-4 h-4 text-purple-500" />
+                    相同点（填一填）
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    无论是传统相册还是数字相册，它们都是多张 _______ 组成的。
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">都是由多张</span>
+                    <input
+                      value={samePoint}
+                      onChange={(e) => setSamePoint(e.target.value)}
+                      placeholder="请输入..."
+                      className="flex-1 max-w-32 h-9 px-3 text-sm border-2 border-purple-200 rounded-lg focus:border-purple-400 focus:outline-none transition-colors"
+                    />
+                    <span className="text-sm">组成的。</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Comparison Rows */}
+              <div className="space-y-4">
+                {rows.map((row) => (
+                  <Card key={row.key} className="border-purple-100 shadow-md">
+                    <CardContent className="p-4 sm:p-5">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600">
+                          {row.icon}
+                        </div>
+                        <h3 className="font-bold text-sm sm:text-base">{row.label}</h3>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Traditional */}
+                        <div className="bg-amber-50 rounded-xl p-3 sm:p-4 border border-amber-100">
+                          <h4 className="text-sm font-bold text-amber-800 mb-3">📖 传统纸质相册</h4>
+                          {row.key === 'materials' ? (
+                            <div className="flex flex-wrap gap-2">
+                              {row.options.map((opt) => (
+                                <button
+                                  key={opt.value}
+                                  onClick={() => toggleMaterial('traditional', opt.value)}
+                                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                                    traditionalMaterials.includes(opt.value)
+                                      ? 'bg-amber-500 text-white shadow-md'
+                                      : 'bg-white text-amber-700 border border-amber-200 hover:border-amber-400'
+                                  }`}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex flex-wrap gap-2">
+                              {row.options.map((opt) => (
+                                <button
+                                  key={opt.value}
+                                  onClick={() =>
+                                    setTraditional((prev) => ({ ...prev, [row.key]: opt.value }))
+                                  }
+                                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                                    traditional[row.key] === opt.value
+                                      ? 'bg-amber-500 text-white shadow-md'
+                                      : 'bg-white text-amber-700 border border-amber-200 hover:border-amber-400'
+                                  }`}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Digital */}
+                        <div className="bg-emerald-50 rounded-xl p-3 sm:p-4 border border-emerald-100">
+                          <h4 className="text-sm font-bold text-emerald-800 mb-3">💻 数字相册</h4>
+                          {row.key === 'materials' ? (
+                            <div className="flex flex-wrap gap-2">
+                              {row.options.map((opt) => (
+                                <button
+                                  key={opt.value}
+                                  onClick={() => toggleMaterial('digital', opt.value)}
+                                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                                    digitalMaterials.includes(opt.value)
+                                      ? 'bg-emerald-500 text-white shadow-md'
+                                      : 'bg-white text-emerald-700 border border-emerald-200 hover:border-emerald-400'
+                                  }`}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex flex-wrap gap-2">
+                              {row.options.map((opt) => (
+                                <button
+                                  key={opt.value}
+                                  onClick={() =>
+                                    setDigital((prev) => ({ ...prev, [row.key]: opt.value }))
+                                  }
+                                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                                    digital[row.key] === opt.value
+                                      ? 'bg-emerald-500 text-white shadow-md'
+                                      : 'bg-white text-emerald-700 border border-emerald-200 hover:border-emerald-400'
+                                  }`}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Submit */}
+              <motion.div className="mt-6 flex justify-center" whileTap={{ scale: 0.97 }}>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={!isComplete}
+                  className="h-11 px-8 text-base font-bold bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 text-white shadow-lg shadow-purple-200 disabled:opacity-50"
+                >
+                  查看总结
+                </Button>
+              </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="summary"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Summary Card */}
+              <Card className="border-emerald-200 shadow-lg mb-5 overflow-hidden">
+                <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-4 sm:p-5">
+                  <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                    ✨ 活动一总结：数字相册的优点
+                  </h2>
+                </div>
+                <CardContent className="p-5 sm:p-6">
+                  <div className="space-y-4">
+                    {/* Comparison Results Table */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm border-collapse">
+                        <thead>
+                          <tr className="bg-muted/50">
+                            <th className="border border-border p-2.5 text-left font-bold">对比项目</th>
+                            <th className="border border-border p-2.5 text-left font-bold text-amber-700">📖 传统纸质相册</th>
+                            <th className="border border-border p-2.5 text-left font-bold text-emerald-700">💻 数字相册</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="border border-border p-2.5 font-medium">存储载体</td>
+                            <td className="border border-border p-2.5 text-amber-700">纸张（相纸）</td>
+                            <td className="border border-border p-2.5 text-emerald-700">数字设备</td>
+                          </tr>
+                          <tr className="bg-muted/30">
+                            <td className="border border-border p-2.5 font-medium">保存时间</td>
+                            <td className="border border-border p-2.5 text-amber-700">可保存一段时间</td>
+                            <td className="border border-border p-2.5 text-emerald-700">永久保存</td>
+                          </tr>
+                          <tr>
+                            <td className="border border-border p-2.5 font-medium">是否能修改</td>
+                            <td className="border border-border p-2.5 text-amber-700">否</td>
+                            <td className="border border-border p-2.5 text-emerald-700">是</td>
+                          </tr>
+                          <tr className="bg-muted/30">
+                            <td className="border border-border p-2.5 font-medium">包含的素材</td>
+                            <td className="border border-border p-2.5 text-amber-700">图片</td>
+                            <td className="border border-border p-2.5 text-emerald-700">图片、文字、音频</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Key Points */}
+                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-4 border border-emerald-100">
+                      <h3 className="font-bold text-emerald-800 mb-2 text-sm">💡 数字相册的优点：</h3>
+                      <ul className="space-y-2 text-sm text-emerald-700">
+                        <li className="flex items-start gap-2">
+                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
+                          <span><strong>存储方便：</strong>保存在数字设备中，不占用物理空间，随身携带。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
+                          <span><strong>永久保存：</strong>不会褪色、不会损坏，可以长期保存珍贵回忆。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
+                          <span><strong>方便编辑：</strong>可以随时修改、添加或删除照片和文字。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
+                          <span><strong>素材丰富：</strong>不仅有图片，还能添加文字说明和背景音乐。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
+                          <span><strong>动态展示：</strong>以动态方式展现，配有动画效果，更加生动有趣。</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>
+                          <span><strong>便于分享：</strong>可以在各种设备和平台上与家人朋友分享。</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Navigation */}
+              <div className="flex justify-end">
+                <motion.div whileTap={{ scale: 0.97 }}>
+                  <Button
+                    onClick={nextStep}
+                    className="h-11 px-8 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-200"
+                  >
+                    下一步
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </div>
+  )
+}
+
+
+===== 文件: src/components/learning/ActivityTwo.tsx =====
+'use client'
+
+import { useState } from 'react'
+import { useLearningStore, type Activity2Answer } from '@/lib/store'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { motion } from 'framer-motion'
+import { ArrowRight, Video, Smartphone, Monitor, Scissors, Sparkles } from 'lucide-react'
+
+const softwareItems = [
+  {
+    name: '剪映',
+    icon: <Scissors className="w-8 h-8" />,
+    color: 'from-emerald-400 to-teal-500',
+    textColor: 'text-emerald-700',
+    bgColor: 'bg-emerald-50',
+    borderColor: 'border-emerald-200',
+    highlight: true,
+    description: '支持电脑端和手机端，功能强大，模板丰富，适合制作数字相册！',
+  },
+  {
+    name: 'PowerPoint',
+    icon: <Monitor className="w-8 h-8" />,
+    color: 'from-orange-400 to-red-500',
+    textColor: 'text-orange-700',
+    bgColor: 'bg-orange-50',
+    borderColor: 'border-orange-200',
+    highlight: false,
+    description: '微软演示文稿软件，也可以用来制作简单的电子相册。',
+  },
+  {
+    name: '美篇',
+    icon: <Smartphone className="w-8 h-8" />,
+    color: 'from-pink-400 to-rose-500',
+    textColor: 'text-pink-700',
+    bgColor: 'bg-pink-50',
+    borderColor: 'border-pink-200',
+    highlight: false,
+    description: '手机端应用，方便快速制作图文并茂的作品。',
+  },
+  {
+    name: '其他软件',
+    icon: <Video className="w-8 h-8" />,
+    color: 'from-violet-400 to-purple-500',
+    textColor: 'text-violet-700',
+    bgColor: 'bg-violet-50',
+    borderColor: 'border-violet-200',
+    highlight: false,
+    description: '还有很多其他软件和App可以制作数字相册。',
+  },
+]
+
+export function ActivityTwo() {
+  const { nextStep, setActivity2Answer, setActivity2Completed } = useLearningStore()
+  const [showTemplates, setShowTemplates] = useState(false)
+  const [isVideo, setIsVideo] = useState<boolean | null>(null)
+  const [templateExplored, setTemplateExplored] = useState(false)
+
+  const handleConfirm = () => {
+    const answer: Activity2Answer = {
+      knowSoftware: '剪映',
+      isVideo: isVideo === true,
+      templateExplored,
+    }
+    setActivity2Answer(answer)
+    setActivity2Completed(true)
+  }
+
+  const canFinish = isVideo === true && templateExplored
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+            🎬 活动二
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            认识制作数字相册的软件
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            了解有哪些软件可以制作数字相册
+          </p>
+        </div>
+
+        {/* Software Introduction */}
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+            💡 常见的数字相册制作软件
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {softwareItems.map((item, index) => (
+              <motion.div
+                key={item.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className={`border-2 ${item.highlight ? item.borderColor + ' shadow-lg' : 'border-border'} overflow-hidden`}>
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white flex-shrink-0`}>
+                        {item.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className={`font-bold ${item.textColor}`}>{item.name}</h3>
+                          {item.highlight && (
+                            <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-full">
+                              推荐使用
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">{item.description}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Key Insight */}
+        <Card className="border-blue-200 shadow-lg mb-6 overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-4">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              🔍 思考：数字相册到底是什么？
+            </h2>
+          </div>
+          <CardContent className="p-5">
+            <p className="text-sm text-muted-foreground mb-4">
+              数字相册里不仅有图片，还能加入文字和音乐，带有动画效果和过渡效果。你觉得，数字相册本质上是什么类型的作品呢？
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setIsVideo(true)}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  isVideo === true
+                    ? 'border-blue-500 bg-blue-50 shadow-md'
+                    : 'border-border bg-white hover:border-blue-200'
+                }`}
+              >
+                <Video className="w-8 h-8 text-blue-500 mb-2" />
+                <h3 className="font-bold text-foreground mb-1">视频</h3>
+                <p className="text-xs text-muted-foreground">
+                  数字相册本质上是视频，可以用视频剪辑软件来制作！
+                </p>
+                {isVideo === true && (
+                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mt-2">
+                    <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                      ✓ 回答正确！
+                    </span>
+                  </motion.div>
+                )}
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setIsVideo(false)}
+                className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  isVideo === false
+                    ? 'border-blue-500 bg-blue-50 shadow-md'
+                    : 'border-border bg-white hover:border-blue-200'
+                }`}
+              >
+                <Monitor className="w-8 h-8 text-gray-500 mb-2" />
+                <h3 className="font-bold text-foreground mb-1">图片/PPT</h3>
+                <p className="text-xs text-muted-foreground">
+                  可能是图片或PPT类型
+                </p>
+                {isVideo === false && (
+                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mt-2">
+                    <span className="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded-full">
+                      再想想哦～
+                    </span>
+                  </motion.div>
+                )}
+              </motion.button>
+            </div>
+
+            {isVideo === true && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100"
+              >
+                <p className="text-sm text-blue-800 leading-relaxed">
+                  <strong>没错！</strong>数字相册本质上就是<strong>视频</strong>。因为它不仅包含静态的图片，
+                  还加入了动态的过渡效果、背景音乐和文字动画，这些都是视频的典型特征。
+                  所以我们可以使用<strong>视频剪辑软件</strong>（比如<strong>剪映</strong>）来制作数字相册！
+                </p>
+              </motion.div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Template Exploration */}
+        {isVideo === true && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Card className="border-emerald-200 shadow-lg mb-6 overflow-hidden">
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-4">
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  🎨 体验剪映相册模板
+                </h2>
+              </div>
+              <CardContent className="p-5">
+                <p className="text-sm text-muted-foreground mb-4">
+                  剪映提供了很多精美的相册模板，可以帮助我们快速制作数字相册。
+                </p>
+
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-start gap-3 bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                    <span className="text-lg">1️⃣</span>
+                    <div>
+                      <h4 className="font-bold text-sm text-emerald-800">打开剪映</h4>
+                      <p className="text-xs text-emerald-600">在电脑或手机上打开剪映软件</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                    <span className="text-lg">2️⃣</span>
+                    <div>
+                      <h4 className="font-bold text-sm text-emerald-800">进入模板中心</h4>
+                      <p className="text-xs text-emerald-600">在首页找到&quot;模板&quot;入口，点击进入</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                    <span className="text-lg">3️⃣</span>
+                    <div>
+                      <h4 className="font-bold text-sm text-emerald-800">搜索相册模板</h4>
+                      <p className="text-xs text-emerald-600">在搜索栏输入&quot;校园&quot;、&quot;相册&quot;等关键词，浏览模板效果</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                    <span className="text-lg">4️⃣</span>
+                    <div>
+                      <h4 className="font-bold text-sm text-emerald-800">选择喜欢的模板</h4>
+                      <p className="text-xs text-emerald-600">和小组同学讨论，选择最适合&quot;校园美好生活&quot;主题的模板</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Template Examples */}
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100 mb-4">
+                  <h3 className="font-bold text-sm text-purple-800 mb-3 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    模板选择小贴士
+                  </h3>
+                  <ul className="space-y-1.5 text-xs text-purple-700">
+                    <li>• 根据主题选择合适的模板风格</li>
+                    <li>• 可以在搜索栏输入关键词快速找到模板</li>
+                    <li>• 注意模板中的图片数量和我们的素材是否匹配</li>
+                    <li>• 选择背景音乐风格和主题相符的模板</li>
+                  </ul>
+                </div>
+
+                <motion.div whileTap={{ scale: 0.97 }}>
+                  <Button
+                    onClick={() => {
+                      setTemplateExplored(true)
+                      setShowTemplates(true)
+                    }}
+                    className="w-full h-11 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-200"
+                  >
+                    {templateExplored ? '✓ 已完成模板探索' : '我已完成模板探索'}
+                  </Button>
+                </motion.div>
+              </CardContent>
+            </Card>
+
+            {/* Next Step */}
+            {canFinish && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex justify-end"
+              >
+                <motion.div whileTap={{ scale: 0.97 }}>
+                  <Button
+                    onClick={() => {
+                      handleConfirm()
+                      nextStep()
+                    }}
+                    className="h-11 px-8 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-200"
+                  >
+                    下一步
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </motion.div>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+      </motion.div>
+    </div>
+  )
+}
+
+
+===== 文件: src/components/learning/ActivityThree.tsx =====
+'use client'
+
+import { useState, useCallback } from 'react'
+import { useLearningStore, type Activity3Answer } from '@/lib/store'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowRight, GripVertical, CheckCircle2, XCircle, Lightbulb } from 'lucide-react'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
+const CORRECT_ORDER = ['分析需求', '收集素材', '制作作品', '完善作品', '发布作品']
+
+const STEP_DESCRIPTIONS: Record<string, string> = {
+  分析需求: '确定作品的主题和内容，给作品起一个响亮的名字。',
+  收集素材: '根据主题，准备好需要的图片、文字和背景音乐。',
+  制作作品: '使用剪映等软件，选择模板并替换素材。',
+  完善作品: '检查作品，修改不合适的地方，让作品更好。',
+  发布作品: '导出视频文件，保存并分享你的数字相册。',
+}
+
+function SortableItem({ id, index }: { id: string; index: number }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : undefined,
+  }
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <div
+        className={`flex items-center gap-3 p-3 sm:p-4 rounded-xl border-2 transition-all ${
+          isDragging
+            ? 'border-emerald-400 bg-emerald-50 shadow-lg scale-105'
+            : 'border-border bg-white hover:border-emerald-200'
+        }`}
+      >
+        {/* Touch-friendly drag handle - larger hit area on mobile */}
+        <div
+          className="w-10 h-10 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white flex-shrink-0 cursor-grab active:cursor-grabbing touch-none select-none"
+          {...attributes}
+          {...listeners}
+          role="button"
+          aria-label={`拖拽排列 ${id}`}
+        >
+          <GripVertical className="w-5 h-5" />
+        </div>
+        <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground flex-shrink-0">
+          {index + 1}
+        </div>
+        <div className="flex-1 min-w-0">
+          <span className="font-bold text-sm sm:text-base">{id}</span>
+          <p className="text-xs text-muted-foreground sm:hidden mt-0.5">{STEP_DESCRIPTIONS[id]}</p>
+        </div>
+        <span className="text-xs text-muted-foreground hidden sm:block">{STEP_DESCRIPTIONS[id]}</span>
+      </div>
+    </div>
+  )
+}
+
+export function ActivityThree() {
+  const { nextStep, setActivity3Answer, setActivity3Completed } = useLearningStore()
+  const [items, setItems] = useState(() => [...CORRECT_ORDER].sort(() => Math.random() - 0.5))
+  const [checked, setChecked] = useState(false)
+  const [isCorrect, setIsCorrect] = useState(false)
+  const [theme, setTheme] = useState('')
+  const [phase, setPhase] = useState<'sort' | 'guide'>('sort')
+
+  const sensors = useSensors(
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5,
+      },
+    }),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && active.id !== over.id) {
+      setItems((prev) => {
+        const oldIndex = prev.indexOf(active.id as string)
+        const newIndex = prev.indexOf(over.id as string)
+        return arrayMove(prev, oldIndex, newIndex)
+      })
+      setChecked(false)
+    }
+  }, [])
+
+  const checkOrder = () => {
+    const correct = items.every((item, index) => item === CORRECT_ORDER[index])
+    setIsCorrect(correct)
+    setChecked(true)
+    if (correct) {
+      setTimeout(() => setPhase('guide'), 1500)
+    }
+  }
+
+  const handleFinish = () => {
+    const answer: Activity3Answer = {
+      sortOrder: items.map((item) => CORRECT_ORDER.indexOf(item) + 1),
+      theme,
+    }
+    setActivity3Answer(answer)
+    setActivity3Completed(true)
+    nextStep()
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-700 rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+            🎨 活动三
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            制作数字相册
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            回顾制作流程，开始创作你的数字相册
+          </p>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {phase === 'sort' && (
+            <motion.div
+              key="sort"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {/* Sorting Game */}
+              <Card className="border-amber-200 shadow-lg mb-5 overflow-hidden">
+                <div className="bg-gradient-to-r from-amber-500 to-orange-500 p-4">
+                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                    🧩 排一排：梳理创作数字作品的流程
+                  </h2>
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    回顾上节课学过的知识，把下面制作数字作品的关键环节按正确顺序排列！
+                  </p>
+                  <p className="text-xs text-amber-600 bg-amber-50 rounded-lg p-2.5 mb-4 border border-amber-100">
+                    💡 <strong>操作提示：</strong>长按左侧绿色拖拽手柄，然后上下移动来调整顺序。手机端请长按150ms后拖动。
+                  </p>
+
+                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                    <SortableContext items={items} strategy={verticalListSortingStrategy}>
+                      <div className="space-y-3">
+                        {items.map((item, index) => (
+                          <SortableItem key={item} id={item} index={index} />
+                        ))}
+                      </div>
+                    </SortableContext>
+                  </DndContext>
+
+                  {/* Check Result */}
+                  {checked && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`mt-4 p-4 rounded-xl flex items-center gap-3 ${
+                        isCorrect
+                          ? 'bg-emerald-50 border border-emerald-200'
+                          : 'bg-red-50 border border-red-200'
+                      }`}
+                    >
+                      {isCorrect ? (
+                        <>
+                          <CheckCircle2 className="w-6 h-6 text-emerald-600 flex-shrink-0" />
+                          <div>
+                            <p className="font-bold text-sm text-emerald-800">排列正确！太棒了！</p>
+                            <p className="text-xs text-emerald-600">
+                              正确的流程是：分析需求 → 收集素材 → 制作作品 → 完善作品 → 发布作品
+                            </p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
+                          <div>
+                            <p className="font-bold text-sm text-red-800">顺序不太对哦，再试试！</p>
+                            <p className="text-xs text-red-600">
+                              提示：先想一想，制作作品之前需要先做什么呢？
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </motion.div>
+                  )}
+
+                  <motion.div className="mt-4 flex justify-center" whileTap={{ scale: 0.97 }}>
+                    <Button
+                      onClick={checkOrder}
+                      disabled={checked && isCorrect}
+                      className="h-11 px-8 text-base font-bold bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg shadow-amber-200 disabled:opacity-50"
+                    >
+                      检查顺序
+                    </Button>
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+          {phase === 'guide' && (
+            <motion.div
+              key="guide"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {/* Theme Selection */}
+              <Card className="border-emerald-200 shadow-lg mb-5 overflow-hidden">
+                <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-4">
+                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                    📋 第一步：确定主题
+                  </h2>
+                </div>
+                <CardContent className="p-5">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    根据制作流程，首先要确定你的数字相册主题。你想做一个什么主题的数字相册呢？
+                  </p>
+                  <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-3 border border-amber-100 mb-4">
+                    <p className="text-xs text-amber-700 flex items-center gap-1.5">
+                      <Lightbulb className="w-3.5 h-3.5" />
+                      参考主题：校园美好生活、冬日校园、主题班会、二十四节气等
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-medium flex-shrink-0">我的主题是：</span>
+                    <Input
+                      value={theme}
+                      onChange={(e) => setTheme(e.target.value)}
+                      placeholder="例如：校园的春天"
+                      className="h-10"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Step by step guide */}
+              <Card className="border-emerald-200 shadow-lg mb-5 overflow-hidden">
+                <div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-4">
+                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                    🎯 第二步：制作指南
+                  </h2>
+                </div>
+                <CardContent className="p-5">
+                  <div className="space-y-4">
+                    {/* Step 1 */}
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        1
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-sm mb-1">收集素材</h4>
+                        <p className="text-xs text-muted-foreground">
+                          打开学习包，找到老师提供的图片和音频素材。也可以使用自己拍摄的照片。
+                        </p>
+                      </div>
+                    </div>
+                    {/* Step 2 */}
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        2
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-sm mb-1">选择相册模板</h4>
+                        <p className="text-xs text-muted-foreground">
+                          打开剪映，在模板中搜索与主题相关的模板（如&quot;校园&quot;）。
+                        </p>
+                      </div>
+                    </div>
+                    {/* Step 3 */}
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        3
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-sm mb-1">替换模板中的图片</h4>
+                        <p className="text-xs text-muted-foreground">
+                          点击模板中的图片，替换成你收集的素材图片。
+                        </p>
+                      </div>
+                    </div>
+                    {/* Step 4 */}
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        4
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-sm mb-1">修改文字</h4>
+                        <p className="text-xs text-muted-foreground">
+                          修改模板中的文字，换成你自己的标题和描述。
+                        </p>
+                      </div>
+                    </div>
+                    {/* Step 5 */}
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        5
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-sm mb-1">预览并导出</h4>
+                        <p className="text-xs text-muted-foreground">
+                          预览效果，确认无误后导出视频，保存你的数字相册作品！
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Tips */}
+              <Card className="border-purple-200 shadow-lg mb-5">
+                <CardContent className="p-5">
+                  <h3 className="font-bold text-sm text-purple-800 mb-3">💡 制作小贴士</h3>
+                  <ul className="space-y-2 text-sm text-purple-700">
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-400 mt-0.5">●</span>
+                      <span>选择的图片要和主题内容相关</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-400 mt-0.5">●</span>
+                      <span>文字要简洁、清楚，表达出你想说的话</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-400 mt-0.5">●</span>
+                      <span>背景音乐要和主题气氛相匹配</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-400 mt-0.5">●</span>
+                      <span>遇到问题可以举手问老师，或者和小组同学讨论</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* Finish */}
+              <div className="flex justify-end">
+                <motion.div whileTap={{ scale: 0.97 }}>
+                  <Button
+                    onClick={handleFinish}
+                    className="h-11 px-8 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-200"
+                  >
+                    完成活动三
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </div>
+  )
+}
+
+
+===== 文件: src/components/learning/Quiz.tsx =====
+'use client'
+
+import { useState } from 'react'
+import { useLearningStore, type QuizAnswer } from '@/lib/store'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowRight, CheckCircle2, XCircle, Trophy, RotateCcw } from 'lucide-react'
+
+interface Question {
+  id: number
+  question: string
+  options: { label: string; value: string }[]
+  correctAnswer: string
+}
+
+const questions: Question[] = [
+  {
+    id: 1,
+    question: '数字相册和传统纸质相册最大的区别是什么？',
+    options: [
+      { label: 'A', value: 'a', text: '数字相册只能保存图片' },
+      { label: 'B', value: 'b', text: '数字相册具有动态展示效果，还能加入音乐' },
+      { label: 'C', value: 'c', text: '传统相册比数字相册好看' },
+      { label: 'D', value: 'd', text: '它们没有区别' },
+    ],
+    correctAnswer: 'b',
+  },
+  {
+    id: 2,
+    question: '以下哪个软件可以用来制作数字相册？',
+    options: [
+      { label: 'A', value: 'a', text: 'Word文字处理软件' },
+      { label: 'B', value: 'b', text: 'Excel表格软件' },
+      { label: 'C', value: 'c', text: '剪映视频剪辑软件' },
+      { label: 'D', value: 'd', text: '计算器' },
+    ],
+    correctAnswer: 'c',
+  },
+  {
+    id: 3,
+    question: '数字相册本质上是什么类型的作品？',
+    options: [
+      { label: 'A', value: 'a', text: '一张普通的图片' },
+      { label: 'B', value: 'b', text: '一个视频' },
+      { label: 'C', value: 'c', text: '一段纯音乐' },
+      { label: 'D', value: 'd', text: '一篇文档' },
+    ],
+    correctAnswer: 'b',
+  },
+  {
+    id: 4,
+    question: '制作数字相册的正确流程是？',
+    options: [
+      { label: 'A', value: 'a', text: '制作作品 → 收集素材 → 分析需求' },
+      { label: 'B', value: 'b', text: '分析需求 → 收集素材 → 制作作品 → 完善作品 → 发布作品' },
+      { label: 'C', value: 'c', text: '发布作品 → 制作作品 → 收集素材' },
+      { label: 'D', value: 'd', text: '收集素材 → 发布作品 → 制作作品' },
+    ],
+    correctAnswer: 'b',
+  },
+  {
+    id: 5,
+    question: '在剪映中，以下哪种方式可以快速制作数字相册？',
+    options: [
+      { label: 'A', value: 'a', text: '使用相册模板，替换其中的图片和文字' },
+      { label: 'B', value: 'b', text: '只能一个一个手动添加图片' },
+      { label: 'C', value: 'c', text: '剪映不能制作数字相册' },
+      { label: 'D', value: 'd', text: '需要自己画所有的动画效果' },
+    ],
+    correctAnswer: 'a',
+  },
+]
+
+export function Quiz() {
+  const { nextStep, setQuizAnswers, setQuizCompleted } = useLearningStore()
+  const [currentQ, setCurrentQ] = useState(0)
+  const [answers, setAnswers] = useState<Record<number, string>>({})
+  const [showResult, setShowResult] = useState(false)
+
+  const handleSelect = (questionId: number, value: string) => {
+    if (showResult) return
+    setAnswers((prev) => ({ ...prev, [questionId]: value }))
+  }
+
+  const handleSubmit = () => {
+    setShowResult(true)
+    const quizAnswers: QuizAnswer[] = questions.map((q) => ({
+      questionId: q.id,
+      selectedOption: answers[q.id] || '',
+      isCorrect: answers[q.id] === q.correctAnswer,
+    }))
+    setQuizAnswers(quizAnswers)
+    setQuizCompleted(true)
+  }
+
+  const handleRetry = () => {
+    setAnswers({})
+    setShowResult(false)
+    setCurrentQ(0)
+  }
+
+  const allAnswered = questions.every((q) => answers[q.id])
+  const correctCount = questions.filter((q) => answers[q.id] === q.correctAnswer).length
+  const score = Math.round((correctCount / questions.length) * 100)
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+            📝 课堂小测试
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            检验你的学习成果
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            共 {questions.length} 道选择题，看看你学会了多少！
+          </p>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {!showResult ? (
+            <motion.div
+              key={`question-${currentQ}`}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Question Card */}
+              <Card className="border-rose-200 shadow-lg mb-5 overflow-hidden">
+                <div className="bg-gradient-to-r from-rose-500 to-pink-500 p-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-bold text-white">
+                      第 {currentQ + 1} 题
+                    </h2>
+                    <span className="text-sm text-white/80">
+                      {currentQ + 1} / {questions.length}
+                    </span>
+                  </div>
+                </div>
+                <CardContent className="p-5 sm:p-6">
+                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-5 leading-relaxed">
+                    {questions[currentQ].question}
+                  </h3>
+
+                  <div className="space-y-3">
+                    {questions[currentQ].options.map((option) => (
+                      <motion.button
+                        key={option.value}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        onClick={() => handleSelect(questions[currentQ].id, option.value)}
+                        className={`w-full p-4 rounded-xl border-2 text-left flex items-center gap-3 transition-all ${
+                          answers[questions[currentQ].id] === option.value
+                            ? 'border-rose-400 bg-rose-50 shadow-md'
+                            : 'border-border bg-white hover:border-rose-200'
+                        }`}
+                      >
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 ${
+                            answers[questions[currentQ].id] === option.value
+                              ? 'bg-rose-500 text-white'
+                              : 'bg-muted text-muted-foreground'
+                          }`}
+                        >
+                          {option.label}
+                        </div>
+                        <span className="text-sm sm:text-base">{option.text}</span>
+                      </motion.button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Question Navigation */}
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentQ(Math.max(0, currentQ - 1))}
+                  disabled={currentQ === 0}
+                  className="h-10"
+                >
+                  上一题
+                </Button>
+
+                {/* Question indicators */}
+                <div className="flex gap-1.5">
+                  {questions.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentQ(idx)}
+                      className={`w-3 h-3 rounded-full transition-all ${
+                        idx === currentQ
+                          ? 'bg-rose-500 scale-125'
+                          : answers[questions[idx].id]
+                          ? 'bg-rose-300'
+                          : 'bg-muted'
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {currentQ < questions.length - 1 ? (
+                  <Button
+                    onClick={() => setCurrentQ(currentQ + 1)}
+                    className="h-10 bg-rose-500 hover:bg-rose-600"
+                  >
+                    下一题
+                  </Button>
+                ) : (
+                  <motion.div whileTap={{ scale: 0.97 }}>
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!allAnswered}
+                      className="h-10 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-lg shadow-rose-200 disabled:opacity-50"
+                    >
+                      提交答案
+                    </Button>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Score Card */}
+              <Card className="border-rose-200 shadow-lg mb-5 overflow-hidden">
+                <div className={`p-6 text-center ${score >= 80 ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : score >= 60 ? 'bg-gradient-to-r from-amber-500 to-orange-500' : 'bg-gradient-to-r from-rose-500 to-pink-500'}`}>
+                  <Trophy className="w-12 h-12 text-white mx-auto mb-2" />
+                  <h2 className="text-2xl font-bold text-white mb-1">{score} 分</h2>
+                  <p className="text-white/80 text-sm">
+                    {score >= 80 ? '太棒了！你掌握得很好！' : score >= 60 ? '不错哦！继续加油！' : '别灰心，多复习一下！'}
+                  </p>
+                </div>
+                <CardContent className="p-5">
+                  <div className="space-y-3">
+                    {questions.map((q, idx) => {
+                      const userAnswer = answers[q.id]
+                      const isCorrect = userAnswer === q.correctAnswer
+                      const userOption = q.options.find((o) => o.value === userAnswer)
+                      const correctOption = q.options.find((o) => o.value === q.correctAnswer)
+
+                      return (
+                        <div
+                          key={q.id}
+                          className={`p-4 rounded-xl border ${
+                            isCorrect ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'
+                          }`}
+                        >
+                          <div className="flex items-start gap-2 mb-2">
+                            {isCorrect ? (
+                              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                            ) : (
+                              <XCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                            )}
+                            <h4 className="font-bold text-sm">{q.question}</h4>
+                          </div>
+                          <div className="ml-7 text-xs space-y-1">
+                            <p className={isCorrect ? 'text-emerald-700' : 'text-red-700'}>
+                              你的答案：{userOption?.label}. {userOption?.text}
+                            </p>
+                            {!isCorrect && (
+                              <p className="text-emerald-700">
+                                正确答案：{correctOption?.label}. {correctOption?.text}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Actions */}
+              <div className="flex items-center justify-between">
+                <motion.div whileTap={{ scale: 0.97 }}>
+                  <Button
+                    onClick={handleRetry}
+                    variant="outline"
+                    className="h-11"
+                  >
+                    <RotateCcw className="w-4 h-4 mr-1" />
+                    重新答题
+                  </Button>
+                </motion.div>
+                <motion.div whileTap={{ scale: 0.97 }}>
+                  <Button
+                    onClick={nextStep}
+                    className="h-11 px-8 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-200"
+                  >
+                    下一步
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </div>
+  )
+}
+
+
+===== 文件: src/components/learning/SelfEvaluation.tsx =====
+'use client'
+
+import { useState } from 'react'
+import { useLearningStore, type SelfEvalAnswer } from '@/lib/store'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { motion } from 'framer-motion'
+import { ArrowRight, Star } from 'lucide-react'
+
+interface EvalItem {
+  id: number
+  title: string
+  description: string
+  icon: string
+  color: string
+}
+
+const evalItems: EvalItem[] = [
+  {
+    id: 1,
+    title: '我了解',
+    description: '我了解数字相册的特点，知道制作数字相册的基本流程以及使用的设备和软件。',
+    icon: '📖',
+    color: 'from-blue-400 to-cyan-500',
+  },
+  {
+    id: 2,
+    title: '我会做',
+    description: '我能利用软件的相关功能（如模板）制作"校园美好生活"数字相册。',
+    icon: '🎨',
+    color: 'from-emerald-400 to-teal-500',
+  },
+  {
+    id: 3,
+    title: '我最棒',
+    description: '我制作的数字相册能充分展示主题，图文一致，文字与背景音乐切合主题表达。',
+    icon: '⭐',
+    color: 'from-amber-400 to-orange-500',
+  },
+  {
+    id: 4,
+    title: '我分享',
+    description: '完成作品后，我能和同学分享交流，表达自己的想法和感受。',
+    icon: '💬',
+    color: 'from-pink-400 to-rose-500',
+  },
+  {
+    id: 5,
+    title: '我探究',
+    description: '我在学习过程中积极思考，遇到困难会想办法解决，并且乐于尝试新的方法。',
+    icon: '🔍',
+    color: 'from-violet-400 to-purple-500',
+  },
+]
+
+function StarRating({ value, onChange, disabled }: { value: number; onChange: (v: number) => void; disabled: boolean }) {
+  const [hovered, setHovered] = useState(0)
+
+  return (
+    <div className="flex items-center gap-1.5">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <motion.button
+          key={star}
+          whileHover={!disabled ? { scale: 1.2 } : {}}
+          whileTap={!disabled ? { scale: 0.9 } : {}}
+          disabled={disabled}
+          onClick={() => onChange(star)}
+          onMouseEnter={() => !disabled && setHovered(star)}
+          onMouseLeave={() => !disabled && setHovered(0)}
+          className="transition-transform"
+        >
+          <Star
+            className={`w-8 h-8 sm:w-10 sm:h-10 transition-colors ${
+              star <= (hovered || value)
+                ? 'fill-amber-400 text-amber-400'
+                : 'fill-transparent text-muted-foreground/30'
+            }`}
+          />
+        </motion.button>
+      ))}
+    </div>
+  )
+}
+
+export function SelfEvaluation() {
+  const { nextStep, setSelfEvalAnswers, setSelfEvalCompleted } = useLearningStore()
+  const [ratings, setRatings] = useState<Record<number, number>>({})
+
+  const handleRate = (id: number, rating: number) => {
+    setRatings((prev) => ({ ...prev, [id]: rating }))
+  }
+
+  const handleSubmit = () => {
+    const answers: SelfEvalAnswer[] = evalItems.map((item) => ({
+      itemId: item.id,
+      rating: ratings[item.id] || 0,
+    }))
+    setSelfEvalAnswers(answers)
+    setSelfEvalCompleted(true)
+    nextStep()
+  }
+
+  const allRated = evalItems.every((item) => ratings[item.id] && ratings[item.id] > 0)
+  const avgRating = Object.values(ratings).length > 0
+    ? (Object.values(ratings).reduce((a, b) => a + b, 0) / Object.values(ratings).length).toFixed(1)
+    : '0'
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-700 rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+            ⭐ 自我评价
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            评一评：我的学习情况
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            根据自己的学习表现，给每个评价项目打星吧！
+          </p>
+        </div>
+
+        {/* Rating Cards */}
+        <div className="space-y-4 mb-6">
+          {evalItems.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Card className="border-amber-100 shadow-md overflow-hidden">
+                <CardContent className="p-4 sm:p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-xl flex-shrink-0`}>
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm sm:text-base text-foreground">{item.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.description}</p>
+                      </div>
+                    </div>
+                    <div className="sm:flex-shrink-0">
+                      <StarRating
+                        value={ratings[item.id] || 0}
+                        onChange={(v) => handleRate(item.id, v)}
+                        disabled={false}
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Summary */}
+        {allRated && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <Card className="border-amber-200 shadow-lg overflow-hidden">
+              <div className="bg-gradient-to-r from-amber-400 to-orange-400 p-4">
+                <h3 className="font-bold text-white text-center">评价小结</h3>
+              </div>
+              <CardContent className="p-5">
+                <div className="text-center">
+                  <div className="text-4xl font-bold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent mb-1">
+                    {avgRating} 分
+                  </div>
+                  <p className="text-sm text-muted-foreground">平均星级（满分5分）</p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {/* Submit */}
+        <div className="flex justify-end">
+          <motion.div whileTap={{ scale: 0.97 }}>
+            <Button
+              onClick={handleSubmit}
+              disabled={!allRated}
+              className="h-11 px-8 text-base font-bold bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg shadow-amber-200 disabled:opacity-50"
+            >
+              查看AI评语
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+
+===== 文件: src/components/learning/AIComment.tsx =====
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useLearningStore } from '@/lib/store'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { motion } from 'framer-motion'
+import { Bot, Loader2, Sparkles, RotateCcw } from 'lucide-react'
+
+export function AIComment() {
+  const {
+    studentName,
+    studentClass,
+    activity1Completed,
+    activity2Completed,
+    activity3Completed,
+    quizAnswers,
+    selfEvalAnswers,
+    aiComment,
+    setAiComment,
+    resetAll,
+    setCurrentStep,
+  } = useLearningStore()
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (!aiComment) {
+      generateComment()
+    }
+  }, [])
+
+  const generateComment = async () => {
+    setLoading(true)
+    setError('')
+
+    try {
+      const quizCorrect = quizAnswers.filter((a) => a.isCorrect).length
+      const quizTotal = quizAnswers.length
+      const avgEval =
+        selfEvalAnswers.length > 0
+          ? selfEvalAnswers.reduce((sum, a) => sum + a.rating, 0) / selfEvalAnswers.length
+          : 0
+
+      const response = await fetch('/api/ai-comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          studentName: studentName || '同学',
+          studentClass: studentClass || '',
+          activity1Completed,
+          activity2Completed,
+          activity3Completed,
+          quizCorrect,
+          quizTotal,
+          avgEval: Math.round(avgEval * 10) / 10,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('生成评语失败')
+      }
+
+      const data = await response.json()
+      setAiComment(data.comment)
+    } catch (err) {
+      setError('生成评语时出现问题，请重试。')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleRestart = () => {
+    resetAll()
+    setCurrentStep(0)
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+            🤖 AI 评语
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            你的专属AI评价
+          </h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            AI老师根据你的课堂表现给出评价
+          </p>
+        </div>
+
+        {/* Stats Summary */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+            className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-3 border border-purple-100 text-center"
+          >
+            <div className="text-2xl mb-1">📸</div>
+            <div className="text-xs text-purple-600 font-medium">活动一</div>
+            <div className="text-sm font-bold text-purple-800">
+              {activity1Completed ? '已完成' : '未完成'}
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-3 border border-blue-100 text-center"
+          >
+            <div className="text-2xl mb-1">🎬</div>
+            <div className="text-xs text-blue-600 font-medium">活动二</div>
+            <div className="text-sm font-bold text-blue-800">
+              {activity2Completed ? '已完成' : '未完成'}
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl p-3 border border-rose-100 text-center"
+          >
+            <div className="text-2xl mb-1">📝</div>
+            <div className="text-xs text-rose-600 font-medium">小测试</div>
+            <div className="text-sm font-bold text-rose-800">
+              {quizAnswers.length > 0
+                ? `${quizAnswers.filter((a) => a.isCorrect).length}/${quizAnswers.length}`
+                : '未完成'}
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-3 border border-amber-100 text-center"
+          >
+            <div className="text-2xl mb-1">⭐</div>
+            <div className="text-xs text-amber-600 font-medium">自评</div>
+            <div className="text-sm font-bold text-amber-800">
+              {selfEvalAnswers.length > 0
+                ? `${(selfEvalAnswers.reduce((s, a) => s + a.rating, 0) / selfEvalAnswers.length).toFixed(1)}/5`
+                : '未完成'}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* AI Comment Card */}
+        <Card className="border-emerald-200 shadow-lg overflow-hidden mb-6">
+          <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-4">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Bot className="w-5 h-5" />
+              AI老师的话
+            </h2>
+          </div>
+          <CardContent className="p-5 sm:p-6">
+            {loading ? (
+              <div className="text-center py-10">
+                <Loader2 className="w-10 h-10 text-emerald-500 animate-spin mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">AI老师正在为你生成专属评语...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-10">
+                <p className="text-sm text-red-500 mb-4">{error}</p>
+                <Button onClick={generateComment} variant="outline" size="sm">
+                  <RotateCcw className="w-4 h-4 mr-1" />
+                  重试
+                </Button>
+              </div>
+            ) : aiComment ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="prose prose-sm max-w-none"
+              >
+                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-4 sm:p-5 border border-emerald-100">
+                  <div className="flex items-start gap-2 mb-3">
+                    <Sparkles className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm font-bold text-emerald-800">
+                      亲爱的{studentName || '同学'}：
+                    </span>
+                  </div>
+                  <div className="text-sm text-emerald-700 leading-relaxed whitespace-pre-line">
+                    {aiComment}
+                  </div>
+                </div>
+              </motion.div>
+            ) : null}
+          </CardContent>
+        </Card>
+
+        {/* Actions */}
+        <div className="flex justify-center gap-3">
+          <motion.div whileTap={{ scale: 0.97 }}>
+            <Button
+              onClick={generateComment}
+              disabled={loading}
+              variant="outline"
+              className="h-11"
+            >
+              <RotateCcw className="w-4 h-4 mr-1" />
+              重新生成
+            </Button>
+          </motion.div>
+          <motion.div whileTap={{ scale: 0.97 }}>
+            <Button
+              onClick={handleRestart}
+              className="h-11 px-8 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-200"
+            >
+              重新开始
+            </Button>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+
+===== 文件: src/lib/store.ts =====
+import { create } from 'zustand'
+
+export interface Activity1Answer {
+  traditional: {
+    storage: string
+    duration: string
+    editable: string
+    materials: string[]
+    other: string
+  }
+  digital: {
+    storage: string
+    duration: string
+    editable: string
+    materials: string[]
+    other: string
+  }
+  samePoint: string
+}
+
+export interface Activity2Answer {
+  knowSoftware: string
+  isVideo: boolean
+  templateExplored: boolean
+}
+
+export interface Activity3Answer {
+  sortOrder: number[] // 正确顺序: 1-分析需求 2-收集素材 3-制作作品 4-完善作品 5-发布作品
+  theme: string
+}
+
+export interface QuizAnswer {
+  questionId: number
+  selectedOption: string
+  isCorrect: boolean
+}
+
+export interface SelfEvalAnswer {
+  itemId: number
+  rating: number // 1-5 stars
+}
+
+export interface LearningStore {
+  // Step navigation
+  currentStep: number
+  totalSteps: number
+  setCurrentStep: (step: number) => void
+  nextStep: () => void
+  prevStep: () => void
+
+  // Student info
+  studentName: string
+  studentClass: string
+  setStudentName: (name: string) => void
+  setStudentClass: (cls: string) => void
+
+  // Activity 1
+  activity1Completed: boolean
+  activity1Answer: Activity1Answer | null
+  setActivity1Answer: (answer: Activity1Answer) => void
+  setActivity1Completed: (completed: boolean) => void
+
+  // Activity 2
+  activity2Completed: boolean
+  activity2Answer: Activity2Answer | null
+  setActivity2Answer: (answer: Activity2Answer) => void
+  setActivity2Completed: (completed: boolean) => void
+
+  // Activity 3
+  activity3Completed: boolean
+  activity3Answer: Activity3Answer | null
+  setActivity3Answer: (answer: Activity3Answer) => void
+  setActivity3Completed: (completed: boolean) => void
+
+  // Quiz
+  quizCompleted: boolean
+  quizAnswers: QuizAnswer[]
+  setQuizAnswers: (answers: QuizAnswer[]) => void
+  setQuizCompleted: (completed: boolean) => void
+
+  // Self Evaluation
+  selfEvalCompleted: boolean
+  selfEvalAnswers: SelfEvalAnswer[]
+  setSelfEvalAnswers: (answers: SelfEvalAnswer[]) => void
+  setSelfEvalCompleted: (completed: boolean) => void
+
+  // AI Comment
+  aiComment: string
+  setAiComment: (comment: string) => void
+
+  // Reset
+  resetAll: () => void
+}
+
+export const useLearningStore = create<LearningStore>((set) => ({
+  currentStep: 0,
+  totalSteps: 7, // 0=welcome, 1=活动一, 2=活动二, 3=活动三, 4=小测试, 5=自我评价, 6=AI评语
+  setCurrentStep: (step) => set({ currentStep: step }),
+  nextStep: () => set((state) => ({ currentStep: Math.min(state.currentStep + 1, state.totalSteps - 1) })),
+  prevStep: () => set((state) => ({ currentStep: Math.max(state.currentStep - 1, 0) })),
+
+  studentName: '',
+  studentClass: '',
+  setStudentName: (name) => set({ studentName: name }),
+  setStudentClass: (cls) => set({ studentClass: cls }),
+
+  activity1Completed: false,
+  activity1Answer: null,
+  setActivity1Answer: (answer) => set({ activity1Answer: answer }),
+  setActivity1Completed: (completed) => set({ activity1Completed: completed }),
+
+  activity2Completed: false,
+  activity2Answer: null,
+  setActivity2Answer: (answer) => set({ activity2Answer: answer }),
+  setActivity2Completed: (completed) => set({ activity2Completed: completed }),
+
+  activity3Completed: false,
+  activity3Answer: null,
+  setActivity3Answer: (answer) => set({ activity3Answer: answer }),
+  setActivity3Completed: (completed) => set({ activity3Completed: completed }),
+
+  quizCompleted: false,
+  quizAnswers: [],
+  setQuizAnswers: (answers) => set({ quizAnswers: answers }),
+  setQuizCompleted: (completed) => set({ quizCompleted: completed }),
+
+  selfEvalCompleted: false,
+  selfEvalAnswers: [],
+  setSelfEvalAnswers: (answers) => set({ selfEvalAnswers: answers }),
+  setSelfEvalCompleted: (completed) => set({ selfEvalCompleted: completed }),
+
+  aiComment: '',
+  setAiComment: (comment) => set({ aiComment: comment }),
+
+  resetAll: () => set({
+    currentStep: 0,
+    studentName: '',
+    studentClass: '',
+    activity1Completed: false,
+    activity1Answer: null,
+    activity2Completed: false,
+    activity2Answer: null,
+    activity3Completed: false,
+    activity3Answer: null,
+    quizCompleted: false,
+    quizAnswers: [],
+    selfEvalCompleted: false,
+    selfEvalAnswers: [],
+    aiComment: '',
+  }),
+}))
+
+
+===== 文件: src/lib/utils.ts =====
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+
+===== 文件: package.json =====
+{
+  "name": "nextjs_tailwind_shadcn_ts",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000 2>&1 | tee dev.log",
+    "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
+    "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
+    "lint": "eslint .",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@hookform/resolvers": "^5.1.1",
+    "@mdxeditor/editor": "^3.39.1",
+    "@prisma/client": "^6.11.1",
+    "@radix-ui/react-accordion": "^1.2.11",
+    "@radix-ui/react-alert-dialog": "^1.1.14",
+    "@radix-ui/react-aspect-ratio": "^1.1.7",
+    "@radix-ui/react-avatar": "^1.1.10",
+    "@radix-ui/react-checkbox": "^1.3.2",
+    "@radix-ui/react-collapsible": "^1.1.11",
+    "@radix-ui/react-context-menu": "^2.2.15",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-dropdown-menu": "^2.1.15",
+    "@radix-ui/react-hover-card": "^1.1.14",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-menubar": "^1.1.15",
+    "@radix-ui/react-navigation-menu": "^1.2.13",
+    "@radix-ui/react-popover": "^1.1.14",
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-radio-group": "^1.3.7",
+    "@radix-ui/react-scroll-area": "^1.2.9",
+    "@radix-ui/react-select": "^2.2.5",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slider": "^1.3.5",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-switch": "^1.2.5",
+    "@radix-ui/react-tabs": "^1.1.12",
+    "@radix-ui/react-toast": "^1.2.14",
+    "@radix-ui/react-toggle": "^1.1.9",
+    "@radix-ui/react-toggle-group": "^1.1.10",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "@reactuses/core": "^6.0.5",
+    "@tanstack/react-query": "^5.82.0",
+    "@tanstack/react-table": "^8.21.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.1.0",
+    "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.23.2",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.525.0",
+    "next": "^16.1.1",
+    "next-auth": "^4.24.11",
+    "next-intl": "^4.3.4",
+    "next-themes": "^0.4.6",
+    "prisma": "^6.11.1",
+    "react": "^19.0.0",
+    "react-day-picker": "^9.8.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.60.0",
+    "react-markdown": "^10.1.0",
+    "react-resizable-panels": "^3.0.3",
+    "react-syntax-highlighter": "^15.6.1",
+    "recharts": "^2.15.4",
+    "sharp": "^0.34.3",
+    "sonner": "^2.0.6",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.1.0",
+    "vaul": "^1.1.2",
+    "z-ai-web-dev-sdk": "^0.0.17",
+    "zod": "^4.0.2",
+    "zustand": "^5.0.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "bun-types": "^1.3.4",
+    "eslint": "^9",
+    "eslint-config-next": "^16.1.1",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.3.5",
+    "typescript": "^5"
+  }
+}
+
+
+===== 文件: next.config.ts =====
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  output: "standalone",
+  /* config options here */
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  reactStrictMode: false,
+};
+
+export default nextConfig;
+
+
+===== 文件: tsconfig.json =====
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+
+
+===== 文件: tailwind.config.ts =====
+import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
+
+const config: Config = {
+    darkMode: "class",
+    content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+        extend: {
+                colors: {
+                        background: 'hsl(var(--background))',
+                        foreground: 'hsl(var(--foreground))',
+                        card: {
+                                DEFAULT: 'hsl(var(--card))',
+                                foreground: 'hsl(var(--card-foreground))'
+                        },
+                        popover: {
+                                DEFAULT: 'hsl(var(--popover))',
+                                foreground: 'hsl(var(--popover-foreground))'
+                        },
+                        primary: {
+                                DEFAULT: 'hsl(var(--primary))',
+                                foreground: 'hsl(var(--primary-foreground))'
+                        },
+                        secondary: {
+                                DEFAULT: 'hsl(var(--secondary))',
+                                foreground: 'hsl(var(--secondary-foreground))'
+                        },
+                        muted: {
+                                DEFAULT: 'hsl(var(--muted))',
+                                foreground: 'hsl(var(--muted-foreground))'
+                        },
+                        accent: {
+                                DEFAULT: 'hsl(var(--accent))',
+                                foreground: 'hsl(var(--accent-foreground))'
+                        },
+                        destructive: {
+                                DEFAULT: 'hsl(var(--destructive))',
+                                foreground: 'hsl(var(--destructive-foreground))'
+                        },
+                        border: 'hsl(var(--border))',
+                        input: 'hsl(var(--input))',
+                        ring: 'hsl(var(--ring))',
+                        chart: {
+                                '1': 'hsl(var(--chart-1))',
+                                '2': 'hsl(var(--chart-2))',
+                                '3': 'hsl(var(--chart-3))',
+                                '4': 'hsl(var(--chart-4))',
+                                '5': 'hsl(var(--chart-5))'
+                        }
+                },
+                borderRadius: {
+                        lg: 'var(--radius)',
+                        md: 'calc(var(--radius) - 2px)',
+                        sm: 'calc(var(--radius) - 4px)'
+                }
+        }
+  },
+  plugins: [tailwindcssAnimate],
+};
+export default config;
+
+
+===== 文件: postcss.config.mjs =====
+const config = {
+  plugins: ["@tailwindcss/postcss"],
+};
+
+export default config;
+
+
+===== 文件: components.json =====
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "iconLibrary": "lucide"
+}
+
+
+===== 文件: .env.example =====
+# ============================
+# AI评语功能配置（可选）
+# ============================
+# 如果不配置任何API，系统会自动使用内置模板生成评语，功能完全可用。
+# 如果想使用AI生成更个性化的评语，可以选择以下任一方式：
+
+# 方式一：OpenAI 官方 API
+# OPENAI_API_KEY=sk-你的密钥
+# OPENAI_BASE_URL=https://api.openai.com/v1
+# OPENAI_MODEL=gpt-4o-mini
+
+# 方式二：DeepSeek（便宜好用）
+# OPENAI_API_KEY=sk-你的密钥
+# OPENAI_BASE_URL=https://api.deepseek.com/v1
+# OPENAI_MODEL=deepseek-chat
+
+# 方式三：硅基流动 SiliconFlow（有免费额度）
+# OPENAI_API_KEY=sk-你的密钥
+# OPENAI_BASE_URL=https://api.siliconflow.cn/v1
+# OPENAI_MODEL=Qwen/Qwen2.5-7B-Instruct
+
+
+============================================================
+  恢复说明
+============================================================
+
+如何从本备份文件恢复项目：
+
+1. 新建 Next.js 项目
+   使用以下命令创建新的 Next.js 项目（或手动创建项目目录结构）：
+   bunx create-next-app@latest my-project --typescript --tailwind --eslint --app --src-dir
+
+2. 复制文件内容
+   打开本备份文件，按照每个文件的标记路径，将对应内容粘贴到项目中的对应位置。
+   例如：
+     - "===== 文件: src/app/page.tsx =====" 后的内容 → 粘贴到项目的 src/app/page.tsx
+     - "===== 文件: package.json =====" 后的内容 → 粘贴到项目的 package.json
+     - 以此类推...
+
+   注意：需要确保目录结构已创建：
+     - src/app/
+     - src/app/api/ai-comment/
+     - src/components/learning/
+     - src/components/ui/          （shadcn/ui 组件，需单独安装）
+     - src/lib/
+     - download/
+
+3. 安装 shadcn/ui 组件
+   项目使用了 shadcn/ui 组件库，需要安装以下 UI 组件：
+   bunx shadcn@latest add button card input toaster
+
+   或者根据 components.json 配置批量安装所需组件。
+
+4. 安装依赖
+   在项目根目录下运行：
+   bun install
+
+5. 配置环境变量（可选）
+   如需使用 AI 评语功能（非内置模板模式），复制 .env.example 为 .env 并填入 API 密钥：
+   cp .env.example .env
+   然后编辑 .env 文件，填入你的 API Key。
+
+   如果不配置，系统会自动使用内置模板生成评语，功能完全可用。
+
+6. 启动项目
+   bun run dev
+
+   项目将在 http://localhost:3000 启动。
+
+============================================================
+  备份结束
+============================================================
